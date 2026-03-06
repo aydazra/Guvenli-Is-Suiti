@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta http-equiv="Content-Security-Policy"
+    content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline';" />
+  <title>Güvenli İş Suiti</title>
+  <link rel="stylesheet" href="style.css" />
+  <script src="../../node_modules/chart.js/dist/chart.umd.js"></script>
+</head>
+<body>
+
+  <div class="title-bar" id="titleBar">
+    <div class="title-bar-left">
+      <div class="app-icon">🔒</div>
+      <span class="app-title">Güvenli İş Suiti</span>
+    </div>
+    <div class="title-bar-drag"></div>
+    <div class="title-bar-controls">
+      <button class="tb-btn tb-minimize" id="btnMinimize" title="Küçült">
+        <svg width="10" height="1" viewBox="0 0 10 1"><rect width="10" height="1" fill="currentColor"/></svg>
+      </button>
+      <button class="tb-btn tb-maximize" id="btnMaximize" title="Büyüt">
+        <svg width="10" height="10" viewBox="0 0 10 10"><rect x="0.5" y="0.5" width="9" height="9" fill="none" stroke="currentColor"/></svg>
+      </button>
+      <button class="tb-btn tb-close" id="btnClose" title="Kapat">
+        <svg width="10" height="10" viewBox="0 0 10 10">
+          <line x1="0" y1="0" x2="10" y2="10" stroke="currentColor" stroke-width="1.5"/>
+          <line x1="10" y1="0" x2="0" y2="10" stroke="currentColor" stroke-width="1.5"/>
+        </svg>
+      </button>
+    </div>
+  </div>
+
+  <div class="app-layout">
+    <nav class="sidebar">
+      <div class="sidebar-logo">GİS</div>
+      <ul class="nav-menu">
+        <li class="nav-item active" data-page="dashboard"><span class="nav-icon">📊</span><span class="nav-label">Panel</span></li>
+        <li class="nav-item" data-page="kanban"><span class="nav-icon">📋</span><span class="nav-label">Görevler</span></li>
+        <li class="nav-item" data-page="timer"><span class="nav-icon">⏱️</span><span class="nav-label">Zaman Takibi</span></li>
+        <li class="nav-item" data-page="vault"><span class="nav-icon">🔐</span><span class="nav-label">Şifreli Kasa</span></li>
+        <li class="nav-item" data-page="reports"><span class="nav-icon">📈</span><span class="nav-label">Raporlar</span></li>
+      </ul>
+      <div class="sidebar-footer"><span class="app-version">v1.0.0</span></div>
+    </nav>
+
+    <main class="content-area">
+
+      <!-- DASHBOARD -->
+      <div class="page active" id="page-dashboard">
+        <div class="page-header">
+          <h1>Hoş Geldiniz 👋</h1>
+          <p class="page-subtitle">Güvenli İş ve Kaynak Yönetim Suiti</p>
+        </div>
+        <div class="dashboard-grid">
+          <div class="card stat-card"><div class="stat-icon">📋</div><div class="stat-info"><span class="stat-number" id="statTasks">0</span><span class="stat-label">Aktif Görev</span></div></div>
+          <div class="card stat-card"><div class="stat-icon">✅</div><div class="stat-info"><span class="stat-number" id="statDone">0</span><span class="stat-label">Tamamlanan</span></div></div>
+          <div class="card stat-card"><div class="stat-icon">⏱️</div><div class="stat-info"><span class="stat-number" id="statHours">0</span><span class="stat-label">Bugün (saat)</span></div></div>
+          <div class="card stat-card"><div class="stat-icon">🔐</div><div class="stat-info"><span class="stat-number" id="statSecrets">0</span><span class="stat-label">Şifreli Not</span></div></div>
+        </div>
+        <div class="card welcome-card">
+          <h2>🚀 Modül Durumu</h2>
+          <ul>
+            <li>✅ Temel Yapı + Custom Title Bar — <strong>Tamamlandı</strong></li>
+            <li>✅ Modül A: Kanban Görev Yönetimi — <strong>Tamamlandı</strong></li>
+            <li>✅ Modül B: Zaman Takibi & Aktivite Log — <strong>Tamamlandı</strong></li>
+            <li>⏳ Modül C: Şifreli Veri Kasası</li>
+            <li>⏳ Modül D: Raporlama & Dışa Aktarım</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- KANBAN -->
+      <div class="page" id="page-kanban">
+        <div class="page-header">
+          <h1>📋 Görev Yönetimi</h1>
+          <button class="btn-primary" id="btnNewTask">+ Yeni Görev</button>
+        </div>
+        <div class="kanban-board">
+          <div class="kanban-column" data-status="todo">
+            <div class="col-header" style="border-color:#4f8ef7"><span>📋 Yapılacaklar</span><span class="col-count" id="count-todo">0</span></div>
+            <div class="col-cards" id="col-todo"></div>
+          </div>
+          <div class="kanban-column" data-status="inprogress">
+            <div class="col-header" style="border-color:#f0a050"><span>⚡ Sürüyor</span><span class="col-count" id="count-inprogress">0</span></div>
+            <div class="col-cards" id="col-inprogress"></div>
+          </div>
+          <div class="kanban-column" data-status="done">
+            <div class="col-header" style="border-color:#4caf7d"><span>✅ Tamamlandı</span><span class="col-count" id="count-done">0</span></div>
+            <div class="col-cards" id="col-done"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ZAMAN TAKİBİ -->
+      <div class="page" id="page-timer">
+        <div class="page-header"><h1>⏱️ Zaman Takibi</h1></div>
+        <div class="card timer-card">
+          <div class="timer-display" id="timerDisplay">00:00:00</div>
+          <div id="timerStatus" class="timer-status"><span id="timerStatusText">⏸️ Hazır</span></div>
+          <div class="timer-form">
+            <input type="text" id="timerDesc" placeholder="Ne yapıyorsunuz? (opsiyonel)" class="form-input" />
+            <select id="timerTaskSelect" class="form-input"><option value="">— Göreve bağla (opsiyonel) —</option></select>
+          </div>
+          <div class="timer-buttons">
+            <button class="btn-success" id="btnStartTimer">▶ Başlat</button>
+            <button class="btn-danger hidden" id="btnStopTimer">⏹ Durdur</button>
+            <button class="btn-secondary" id="btnResetTimer">↺ Sıfırla</button>
+          </div>
+        </div>
+        <div class="timer-stats-row">
+          <div class="card timer-stat-card"><div class="timer-stat-icon">⏱️</div><div class="timer-stat-info"><span class="timer-stat-number" id="todayTotal">00:00:00</span><span class="timer-stat-label">Bugün Toplam</span></div></div>
+          <div class="card timer-stat-card"><div class="timer-stat-icon">🔄</div><div class="timer-stat-info"><span class="timer-stat-number" id="todaySessions">0</span><span class="timer-stat-label">Oturum Sayısı</span></div></div>
+        </div>
+        <div class="card">
+          <h3 class="section-title">📋 Aktivite Logu</h3>
+          <div class="table-wrapper">
+            <table class="log-table">
+              <thead><tr><th>Tarih/Saat</th><th>Açıklama</th><th>Görev</th><th>Süre</th><th></th></tr></thead>
+              <tbody id="timeLogBody"><tr><td colspan="5" class="no-logs">Henüz kayıt yok.</td></tr></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- ŞİFRELİ KASA -->
+      <div class="page" id="page-vault">
+        <div class="page-header">
+          <h1>🔐 Şifreli Kasa</h1>
+          <div id="vaultHeaderBtns" style="display:none">
+            <button class="btn-secondary" id="btnLockVault">🔒 Kilitle</button>
+            <button class="btn-primary" id="btnNewVaultEntry">+ Yeni Not</button>
+          </div>
+        </div>
+
+        <!-- KİLİT EKRANI -->
+        <div id="vaultLockScreen" class="vault-lock-screen active">
+          <div class="vault-lock-card card">
+            <div class="vault-lock-icon">🔐</div>
+            <h2 class="vault-lock-title">Şifreli Kasa</h2>
+            <p class="vault-lock-desc">Kasaya erişmek için Master Key'inizi girin.<br/>Veriler AES-256-GCM ile şifrelenmiştir.</p>
+            <div class="vault-key-input-row">
+              <input type="password" id="masterKeyInput" class="form-input vault-key-input"
+                placeholder="Master Key..." autocomplete="off" />
+              <button class="btn-primary" id="btnSubmitMasterKey">Aç 🔓</button>
+            </div>
+            <div id="vaultKeyError" class="vault-key-error" style="display:none"></div>
+            <div class="vault-lock-warning">
+              ⚠️ Master Key unutulursa veriler kurtarılamaz. Güvenli bir yerde saklayın.
+            </div>
+          </div>
+        </div>
+
+        <!-- KASA İÇERİĞİ -->
+        <div id="vaultContent" class="vault-content">
+          <div id="vaultList" class="vault-list"></div>
+        </div>
+      </div>
+      <!-- RAPORLAR -->
+      <div class="page" id="page-reports">
+        <div class="page-header">
+          <h1>📈 Haftalık Rapor</h1>
+          <div style="display:flex;gap:10px">
+            <button class="btn-secondary" id="btnRefreshReport">🔄 Yenile</button>
+            <button class="btn-primary" id="btnExportPDF">📄 PDF İndir</button>
+          </div>
+        </div>
+
+        <div id="reportContent">
+          <!-- Özet Kartlar -->
+          <div class="report-grid" style="margin-bottom:16px">
+            <div class="card stat-card">
+              <div class="stat-icon">⏱️</div>
+              <div class="stat-info"><span class="stat-number" id="repTotalHours">0 sa</span><span class="stat-label">Haftalık Toplam</span></div>
+            </div>
+            <div class="card stat-card">
+              <div class="stat-icon">🔄</div>
+              <div class="stat-info"><span class="stat-number" id="repTotalSessions">0</span><span class="stat-label">Toplam Oturum</span></div>
+            </div>
+            <div class="card stat-card">
+              <div class="stat-icon">📊</div>
+              <div class="stat-info"><span class="stat-number" id="repAvgHours">0 sa</span><span class="stat-label">Günlük Ortalama</span></div>
+            </div>
+            <div class="card stat-card">
+              <div class="stat-icon">✅</div>
+              <div class="stat-info"><span class="stat-number" id="repTasksDone">0</span><span class="stat-label">Tamamlanan Görev</span></div>
+            </div>
+          </div>
+
+          <!-- Haftalık Grafik -->
+          <div class="card" style="margin-bottom:16px">
+            <h3 class="section-title">📅 Son 7 Gün - Çalışma Saatleri</h3>
+            <div style="height:260px;position:relative">
+              <canvas id="weeklyChart"></canvas>
+            </div>
+          </div>
+
+          <!-- Alt İki Sütun -->
+          <div class="report-bottom-grid">
+            <!-- En Çok Çalışılan Görevler -->
+            <div class="card">
+              <h3 class="section-title">🏆 En Çok Çalışılan Görevler</h3>
+              <div class="table-wrapper">
+                <table class="log-table">
+                  <thead><tr><th>Görev</th><th>Proje</th><th>Süre</th></tr></thead>
+                  <tbody id="topTasksBody"></tbody>
+                </table>
+              </div>
+            </div>
+
+            <!-- Görev Durumu -->
+            <div class="card">
+              <h3 class="section-title">📋 Görev Durumu</h3>
+              <div id="taskStatusStats" class="status-stats"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </main>
+  </div>
+
+  <!-- GÖREV OLUŞTUR/DÜZENLE MODALİ -->
+  <div class="modal-overlay" id="taskModal">
+    <div class="modal modal-wide">
+      <div class="modal-header">
+        <h2 id="modalTitle">Yeni Görev</h2>
+        <button class="modal-close" id="btnCloseTaskModal">✕</button>
+      </div>
+      <div class="modal-body">
+        <div class="form-row">
+          <div class="form-group">
+            <label>Başlık *</label>
+            <input type="text" id="taskTitleInput" placeholder="Görev başlığı..." class="form-input" />
+          </div>
+          <div class="form-group">
+            <label>Proje</label>
+            <input type="text" id="taskProjectInput" placeholder="Proje adı..." class="form-input" value="Genel" />
+          </div>
+        </div>
+        <div class="form-group">
+          <label>Açıklama</label>
+          <textarea id="taskDescInput" placeholder="Açıklama (opsiyonel)..." class="form-input" rows="2"></textarea>
+        </div>
+        <div class="form-group">
+          <label>Notlar</label>
+          <textarea id="taskNotesInput" placeholder="Ek notlar, bağlantılar vb..." class="form-input" rows="3"></textarea>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label>Öncelik</label>
+            <select id="taskPriorityInput" class="form-input">
+              <option value="low">🟢 Düşük</option>
+              <option value="medium" selected>🟡 Orta</option>
+              <option value="high">🔴 Yüksek</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Durum</label>
+            <select id="taskStatusInput" class="form-input">
+              <option value="todo">📋 Yapılacak</option>
+              <option value="inprogress">⚡ Sürüyor</option>
+              <option value="done">✅ Tamamlandı</option>
+            </select>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn-secondary" id="btnCancelTask">İptal</button>
+        <button class="btn-primary" id="btnSaveTask">Kaydet</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- DETAY MODALİ (Dosyalar + Yorumlar) -->
+  <div class="modal-overlay" id="detailModal">
+    <div class="modal modal-wide">
+      <div class="modal-header">
+        <div>
+          <h2 id="detailTaskTitle">Görev Detayı</h2>
+          <span id="detailTaskProject" class="detail-project-badge"></span>
+        </div>
+        <button class="modal-close" id="btnCloseDetailModal">✕</button>
+      </div>
+      <div class="modal-body detail-body">
+
+        <!-- Dosyalar -->
+        <div class="detail-section">
+          <div class="detail-files-header">
+            <span class="section-title" style="margin:0">📎 Ekli Dosyalar</span>
+            <button class="btn-primary btn-sm" id="btnAddFile">+ Dosya Ekle</button>
+          </div>
+          <div id="fileList" class="file-list"></div>
+        </div>
+
+        <!-- Yorumlar -->
+        <div class="detail-section">
+          <h3 class="section-title">💬 Yorumlar & Notlar</h3>
+          <div id="commentList" class="comment-list"></div>
+          <div class="comment-input-row">
+            <textarea id="commentInput" class="form-input" placeholder="Yorum ekle..." rows="2"></textarea>
+            <button class="btn-primary" id="btnAddComment">Ekle</button>
+          </div>
+        </div>
+
+      </div>
+      <div class="modal-footer">
+        <button class="btn-secondary" id="btnCloseDetail">Kapat</button>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- ŞİFRELİ KASA MODALİ -->
+  <div class="modal-overlay" id="vaultModal">
+    <div class="modal modal-wide">
+      <div class="modal-header">
+        <h2 id="vaultModalTitle">Şifreli Not</h2>
+        <button class="modal-close" id="btnCloseVaultModal">✕</button>
+      </div>
+      <div class="modal-body">
+        <div class="form-group">
+          <label>Başlık *</label>
+          <input type="text" id="vaultTitleInput" placeholder="Not başlığı..." class="form-input" autocomplete="off" />
+        </div>
+        <div class="form-group">
+          <label>İçerik (Şifrelenecek)</label>
+          <textarea id="vaultContentInput" class="form-input vault-content-area"
+            placeholder="Şifre, not, gizli bilgi... (AES-256 ile şifrelenecek)" rows="10"
+            autocomplete="off" autocorrect="off" spellcheck="false"></textarea>
+        </div>
+        <div class="vault-encrypt-badge">🔒 Kaydedildiğinde AES-256-GCM ile şifrelenir</div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn-secondary" id="btnCancelVault">İptal</button>
+        <button class="btn-primary" id="btnSaveVault">🔐 Şifrele & Kaydet</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="app.js"></script>
+  <script src="kanban.js"></script>
+  <script src="timer.js"></script>
+  <script src="vault.js"></script>
+  <script src="reports.js"></script>
+</body>
+</html>

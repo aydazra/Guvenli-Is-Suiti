@@ -1,0 +1,37 @@
+{
+  "name": "guvenli-is-suiti",
+  "version": "1.0.0",
+  "description": "Yerel Güvenli İş ve Kaynak Yönetim Suiti",
+  "main": "dist/main/main.js",
+  "scripts": {
+    "build": "tsc",
+    "start": "npm run build && electron .",
+    "dev": "tsc && electron .",
+    "lint": "eslint src/**/*.ts --fix"
+  },
+  "devDependencies": {
+    "@types/better-sqlite3": "^7.6.13",
+    "@types/node": "^20.0.0",
+    "@typescript-eslint/eslint-plugin": "^8.56.1",
+    "@typescript-eslint/parser": "^8.56.1",
+    "electron": "^28.0.0",
+    "electron-builder": "^24.0.0",
+    "electron-rebuild": "^3.2.9",
+    "eslint": "^10.0.2",
+    "typescript": "^5.3.0"
+  },
+  "build": {
+    "appId": "com.sirket.guvenli-is-suiti",
+    "productName": "Güvenli İş Suiti",
+    "win": {
+      "target": "nsis"
+    },
+    "directories": {
+      "output": "build"
+    }
+  },
+  "dependencies": {
+    "better-sqlite3": "^12.6.2",
+    "chart.js": "^4.5.1"
+  }
+}
