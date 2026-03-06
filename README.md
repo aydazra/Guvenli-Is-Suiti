@@ -13,6 +13,8 @@
 
 Kurum içi kullanıma yönelik, **internet bağlantısından bağımsız** çalışabilen masaüstü yönetim uygulamasıdır. Çalışanların görevlerini takip edebileceği, süre tutabileceği ve hassas notlarını şifreli şekilde saklayabileceği kapsamlı bir araçtır.
 
+<img width="1608" height="1002" alt="1Ekran görüntüsü 2026-03-06 130411" src="https://github.com/user-attachments/assets/890ab467-b9d8-4c60-ad0f-f28433ce6c7d" />
+
 ---
 
 ## 🛠️ Teknoloji Yığını
@@ -70,6 +72,9 @@ guvenli-is-suiti/
 - Yorum ve not ekleme
 - Kart üzerinde dosya/yorum sayacı
 
+<img width="1597" height="1005" alt="2Ekran görüntüsü 2026-03-06 130850" src="https://github.com/user-attachments/assets/8eb0885d-fa61-450e-85de-3f677428e8e5" />
+
+
 ### Modül B — Zaman Takibi ⏱️
 - Başlat/Durdur zamanlayıcı
 - Göreve bağlı zaman kaydı
@@ -78,12 +83,20 @@ guvenli-is-suiti/
 - System Tray entegrasyonu
 - 10 dakika hareketsizlik bildirimi
 
+<img width="1598" height="997" alt="3Ekran görüntüsü 2026-03-06 131111" src="https://github.com/user-attachments/assets/38672b85-fdc0-4ed3-b6c2-0e7c006efad0" />
+
+
 ### Modül C — Şifreli Veri Kasası 🔐
 - **AES-256-GCM** şifreleme (Node.js `crypto` modülü)
 - **PBKDF2** ile anahtar türetme (100.000 iterasyon)
 - Master Key ile kilitleme/açma
 - Veriler SQLite'a **plain text olarak DEĞİL** şifreli kaydedilir
 - Master Key hiçbir yerde saklanmaz
+  
+<img width="1585" height="1001" alt="4Ekran görüntüsü 2026-03-06 131131" src="https://github.com/user-attachments/assets/9dcd6476-b852-4d2f-ad11-a931777039e4" />
+
+<img width="1595" height="996" alt="5rEkran görüntüsü 2026-03-06 131331" src="https://github.com/user-attachments/assets/6c0685c5-0542-47d0-874a-1e831e044fbe" />
+
 
 ### Modül D — Raporlama & Dışa Aktarım 📈
 - Haftalık çalışma özeti
@@ -91,6 +104,9 @@ guvenli-is-suiti/
 - En çok çalışılan görevler tablosu
 - Görev durumu istatistiği
 - **PDF İndir** — kullanıcının seçtiği dizine kaydedilir
+
+<img width="1593" height="997" alt="6Ekran görüntüsü 2026-03-06 131352" src="https://github.com/user-attachments/assets/ab21f6bb-4e1c-46c0-ad6d-e9b4d7f071d6" />
+
 
 ---
 
