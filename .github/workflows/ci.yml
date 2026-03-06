@@ -1,0 +1,33 @@
+name: CI - Güvenli İş Suiti
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build:
+    runs-on: windows-latest
+
+    steps:
+      - name: Kodu çek
+        uses: actions/checkout@v4
+
+      - name: Node.js kur
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Bağımlılıkları yükle
+        run: npm ci
+
+      - name: Lint kontrolü
+        run: npm run lint
+
+      - name: TypeScript derle
+        run: npx tsc --noEmit
+
+      - name: Derleme başarılı
+        run: echo "✅ Tüm kontroller geçti!"
